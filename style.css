@@ -436,7 +436,7 @@ a {
 /* Responsive Grid Tweaks */
 @media (max-width: 768px) {
   .hero h1 {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
   }
   
   .hero-ctas {
@@ -449,7 +449,26 @@ a {
   .nav {
     flex-direction: column;
     height: auto;
-    padding: 1rem 0;
-    gap: 1rem;
+    padding: 1.5rem 0;
+    gap: 1.25rem;
+  }
+
+  .logo img {
+    height: 22px !important;
+  }
+
+  .nav-links {
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .docs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .steps-timeline {
+    grid-template-columns: 1fr;
+    gap: 3rem;
   }
 }
