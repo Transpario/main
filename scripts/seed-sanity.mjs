@@ -17,7 +17,7 @@ if (!writeToken) {
 }
 
 const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'b77dwhwwyes',
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'b77dwhww',
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   useCdn: false,
   apiVersion: '2024-01-01',
