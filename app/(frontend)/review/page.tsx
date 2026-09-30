@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 import { ExperienceForm } from '@/components/experience/ExperienceForm';
 
 export const metadata: Metadata = {
-  title: 'Report an Internship - Transpario',
+  title: 'Share My Experience - Transpario',
   description: 'Tell us what happened. Submit your field notes to help another student make an informed decision.',
 };
 
@@ -19,7 +19,7 @@ export default function ReviewPage() {
             FIELD NOTES
           </span>
           <h1 className="text-[28px] md:text-[40px] font-heading font-bold uppercase tracking-tight text-foreground mb-4 leading-tight">
-            Report an internship.
+            Share my experience.
           </h1>
           <p className="text-[16px] md:text-[18px] text-foreground-muted leading-relaxed">
             Not a rating. Not a review. Just a personal account of what actually happened during your internship.

@@ -173,7 +173,7 @@ export default function HowItWorksPage() {
                   Your experience helps future students make informed choices before applying.
                 </p>
                 <Button href="/review" variant="primary" className="w-full flex items-center justify-center gap-2 text-xs">
-                  <span>REPORT AN INTERNSHIP</span>
+                  <span>SHARE MY EXPERIENCE</span>
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               </Card>

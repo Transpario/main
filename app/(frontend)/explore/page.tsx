@@ -56,7 +56,7 @@ export default async function ExplorePage({ searchParams }: { searchParams: Prom
           href="/review"
           className="inline-flex items-center gap-2 h-[40px] px-5 bg-white !text-black font-heading font-bold text-[12px] uppercase tracking-[0.1em] rounded-[var(--radius)] hover:bg-white/90 hover:-translate-y-[1px] hover:shadow-[0_4px_14px_rgba(0,0,0,0.18)] active:translate-y-0 transition-all duration-200 ease-out select-none shrink-0 group"
         >
-          <span>Report an Internship</span>
+          <span>Share My Experience</span>
           <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
         </Link>
       </div>

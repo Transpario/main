@@ -39,7 +39,7 @@ export default async function ExperiencesIndexPage() {
             {reviews.map((review, i) => {
               const number = String(i + 1).padStart(2, '0');
               
-              // @ts-ignore - internship mapping from groq
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               const internship = review.internship as any;
               
               const platformName = internship?.platform?.name || 'Unknown Company';
@@ -80,7 +80,7 @@ export default async function ExperiencesIndexPage() {
                         </div>
                       ) : review.keyTakeaway ? (
                         <blockquote className="text-[18px] md:text-[22px] text-foreground mb-8 leading-relaxed max-w-2xl italic">
-                          "{review.keyTakeaway}"
+                          &quot;{review.keyTakeaway}&quot;
                         </blockquote>
                       ) : (
                         <p className="text-[18px] md:text-[22px] text-foreground mb-8 leading-relaxed max-w-2xl italic opacity-50">
@@ -115,7 +115,7 @@ export default async function ExperiencesIndexPage() {
               href="/review"
               className="inline-flex items-center gap-3 h-[44px] px-6 bg-white !text-black font-heading font-bold text-[13px] uppercase tracking-[0.1em] rounded-[var(--radius)] hover:bg-white/90 hover:!text-black transition-all"
             >
-              <span>Report an Internship</span>
+              <span>Share My Experience</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </section>

@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ArrowRight, ArrowLeft, CheckCircle2, ChevronDown, Loader2 } from 'lucide-react';
+import { ArrowRight, ArrowLeft, ChevronDown, Loader2 } from 'lucide-react';
 import { z } from 'zod';
 import { useLenis } from 'lenis/react';
 import { LazyMotion, domAnimation, m, AnimatePresence } from 'motion/react';
+import { LocationAutocomplete } from './LocationAutocomplete';
 
 export const reviewFormSchema = z.object({
   company: z.string().min(1, "Company name is required").max(100, "Too long"),
@@ -111,6 +112,7 @@ export function ExperienceForm() {
         }
       } catch (err) {
         if (err instanceof z.ZodError) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           newErrors[field] = (err as any).errors[0].message;
           stepIsValid = false;
         }
@@ -328,7 +330,7 @@ export function ExperienceForm() {
                     { value: 'onsite', label: 'On-site' },
                     { value: 'hybrid', label: 'Hybrid' },
                   ]} />
-                  <InputField label="Location (City, State)" name="location" value={data.location} onChange={handleChange} error={errors.location} placeholder="e.g. Bangalore, KA" />
+                  <LocationAutocomplete label="Location (City, State)" name="location" value={data.location} onChange={handleChange} error={errors.location} placeholder="e.g. Bangalore, KA" />
                   <InputField label="When did you intern?" name="period" value={data.period} onChange={handleChange} error={errors.period} placeholder="e.g. Summer 2026, May-July" />
                 </div>
               </m.div>
@@ -504,7 +506,7 @@ export function ExperienceForm() {
                 </>
               ) : (
                 <>
-                  <span>Submit Notes</span>
+                  <span>Submit My Notes</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </>
               )}
@@ -519,6 +521,7 @@ export function ExperienceForm() {
 }
 
 // Reusable Components
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function InputField({ label, name, value, onChange, placeholder, autoFocus, type = 'text', error }: any) {
   const [isFocused, setIsFocused] = useState(false);
   return (
@@ -552,6 +555,7 @@ function InputField({ label, name, value, onChange, placeholder, autoFocus, type
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function TextAreaField({ label, name, value, onChange, placeholder, autoFocus, error }: any) {
   const [isFocused, setIsFocused] = useState(false);
   return (
@@ -585,6 +589,7 @@ function TextAreaField({ label, name, value, onChange, placeholder, autoFocus, e
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function SelectField({ label, name, value, onChange, options, autoFocus, error }: any) {
   const [isFocused, setIsFocused] = useState(false);
   return (
@@ -600,6 +605,7 @@ function SelectField({ label, name, value, onChange, options, autoFocus, error }
           onBlur={() => setIsFocused(false)}
           className={`w-full bg-transparent pb-3 text-[16px] focus:outline-none font-body appearance-none cursor-pointer border-b border-white/[0.1] ${value === '' ? 'text-foreground-muted' : 'text-foreground'}`}
         >
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           {options.map((opt: any) => (
             <option key={opt.value} value={opt.value} className="bg-surface text-foreground">
               {opt.label}

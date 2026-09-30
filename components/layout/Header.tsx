@@ -23,6 +23,7 @@ export default function Header() {
 
   useEffect(() => {
     if (pathname !== '/') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setShowNavButton(true);
       return;
     }
@@ -139,7 +140,7 @@ export default function Header() {
                 showNavButton ? 'opacity-100' : 'opacity-0 pointer-events-none'
               }`}
             >
-              <span>Report an Internship</span>
+              <span>Share My Experience</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </nav>
@@ -182,7 +183,7 @@ export default function Header() {
                   onClick={closeMenu}
                   className="flex items-center justify-center gap-2 h-[44px] w-full bg-white !text-black hover:!text-black font-heading font-bold text-[13px] uppercase tracking-[0.1em] rounded-[var(--radius)] hover:bg-white/90 transition-all"
                 >
-                  <span>Report an Internship</span>
+                  <span>Share My Experience</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>

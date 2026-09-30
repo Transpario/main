@@ -53,7 +53,7 @@ const staticFaqs = [
   {
     _id: '7',
     question: 'Can I submit an internship experience?',
-    answer: 'Yes. Use the "Report an Internship" form to submit your experience.',
+    answer: 'Yes. Use the "Share My Experience" form to submit your field notes.',
     category: 'Submitting Experiences',
   },
   {

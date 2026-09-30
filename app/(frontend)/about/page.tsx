@@ -182,7 +182,7 @@ export default function AboutPage() {
                   EXPLORE INTERNSHIPS
                 </Button>
                 <Button href="/review" variant="secondary" className="w-full sm:w-auto flex items-center justify-center gap-2">
-                  <span>REPORT AN INTERNSHIP</span>
+                  <span>SHARE MY EXPERIENCE</span>
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               </div>

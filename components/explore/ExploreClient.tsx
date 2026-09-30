@@ -275,7 +275,7 @@ export function ExploreClient({ initialPrograms, initialFilters, initialSearch, 
                       href="/review"
                       className="inline-flex items-center gap-3 h-[44px] px-6 bg-white !text-black font-heading font-bold text-[13px] uppercase tracking-[0.1em] rounded-[var(--radius)] hover:bg-white/90 hover:!text-black hover:-translate-y-[1px] hover:shadow-[0_4px_14px_rgba(0,0,0,0.18)] active:translate-y-0 transition-all duration-200 ease-out select-none"
                     >
-                      <span>Report an Internship</span>
+                      <span>Share My Experience</span>
                       <ArrowRight className="w-4 h-4" />
                     </Link>
                   </div>
