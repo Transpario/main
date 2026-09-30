@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { Search, ChevronDown, X, HelpCircle, FilterX } from 'lucide-react';
+import { LazyMotion, domAnimation, m, AnimatePresence } from 'motion/react';
 import Card from '../ui/Card';
 import Button from '../ui/Button';
 
@@ -107,9 +108,10 @@ export default function FaqClient({ faqs }: FaqClientProps) {
   const totalCount = filteredFaqs.length;
 
   return (
-    <div className="space-y-8">
-      {/* Search & Category Filter Controls */}
-      <div className="space-y-4">
+    <LazyMotion features={domAnimation}>
+      <div className="space-y-8">
+        {/* Search & Category Filter Controls */}
+        <div className="space-y-4">
         {/* Search Bar */}
         <div className="relative w-full max-w-2xl">
           <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-foreground-subtle">
@@ -133,7 +135,7 @@ export default function FaqClient({ faqs }: FaqClientProps) {
           )}
         </div>
 
-        {/* Category Tabs */}
+      {/* Category Tabs */}
         <div className="flex flex-wrap gap-2 pt-1">
           {categories.map((cat) => {
             const isActive = selectedCategory === cat;
@@ -141,13 +143,20 @@ export default function FaqClient({ faqs }: FaqClientProps) {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-3.5 py-1.5 text-xs font-heading font-semibold uppercase tracking-wider rounded-[var(--radius)] transition-all cursor-pointer ${
+                className={`relative px-3.5 py-1.5 text-xs font-heading font-semibold uppercase tracking-wider rounded-[var(--radius)] transition-colors cursor-pointer ${
                   isActive
-                    ? 'bg-accent text-white shadow-[0_0_12px_rgba(37,99,235,0.3)]'
-                    : 'bg-surface border border-border text-foreground-muted hover:text-foreground hover:border-border-strong'
+                    ? 'text-white'
+                    : 'text-foreground-muted hover:text-foreground'
                 }`}
               >
-                {cat}
+                {isActive && (
+                  <m.div
+                    layoutId="faqCategory"
+                    className="absolute inset-0 bg-accent rounded-[var(--radius)] shadow-[0_0_12px_rgba(37,99,235,0.3)] z-0"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+                <span className="relative z-10">{cat}</span>
               </button>
             );
           })}
@@ -191,7 +200,7 @@ export default function FaqClient({ faqs }: FaqClientProps) {
                   return (
                     <div
                       key={faq._id}
-                      className="border border-border bg-surface rounded-[var(--radius)] overflow-hidden transition-colors hover:border-border-strong"
+                      className="border border-border bg-white/[0.03] backdrop-blur-md rounded-[var(--radius)] overflow-hidden transition-colors hover:border-border-strong"
                     >
                       <button
                         onClick={() => toggleAccordion(faq._id)}
@@ -201,26 +210,31 @@ export default function FaqClient({ faqs }: FaqClientProps) {
                         <h3 className="text-base sm:text-lg font-bold font-heading uppercase tracking-tight text-foreground group-hover:text-accent transition-colors leading-snug">
                           {faq.question}
                         </h3>
-                        <div className="w-8 h-8 rounded-full bg-surface-hover border border-border flex items-center justify-center shrink-0 group-hover:border-accent/60 transition-colors">
-                          <ChevronDown
-                            className={`w-4 h-4 text-foreground-subtle group-hover:text-accent transition-transform duration-200 ${
-                              isOpen ? 'rotate-180 text-accent' : 'rotate-0'
-                            }`}
-                          />
+                        <div className="w-8 h-8 rounded-full bg-white/[0.05] border border-border flex items-center justify-center shrink-0 group-hover:border-accent/60 transition-colors">
+                          <m.div
+                            animate={{ rotate: isOpen ? 180 : 0 }}
+                            transition={{ duration: 0.2, ease: "easeOut" }}
+                          >
+                            <ChevronDown className={`w-4 h-4 transition-colors ${isOpen ? 'text-accent' : 'text-foreground-subtle group-hover:text-accent'}`} />
+                          </m.div>
                         </div>
                       </button>
 
-                      <div
-                        className={`grid transition-[grid-template-rows] duration-200 ease-out ${
-                          isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
-                        }`}
-                      >
-                        <div className="overflow-hidden">
-                          <div className="px-5 pb-5 pt-2 border-t border-border/40 text-body text-foreground-muted leading-relaxed">
-                            {faq.answer}
-                          </div>
-                        </div>
-                      </div>
+                      <AnimatePresence initial={false}>
+                        {isOpen && (
+                          <m.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
+                            className="overflow-hidden"
+                          >
+                            <div className="px-5 pb-5 pt-2 border-t border-border/40 text-body text-foreground-muted leading-relaxed">
+                              {faq.answer}
+                            </div>
+                          </m.div>
+                        )}
+                      </AnimatePresence>
                     </div>
                   );
                 })}
@@ -254,6 +268,7 @@ export default function FaqClient({ faqs }: FaqClientProps) {
           </div>
         </Card>
       )}
-    </div>
+      </div>
+    </LazyMotion>
   );
 }

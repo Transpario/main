@@ -10,6 +10,8 @@ import { InternshipProgram } from '@/lib/sanity/types';
 import { ArrowRight, SearchX } from 'lucide-react';
 import Link from 'next/link';
 import Tag from '../ui/Tag';
+import { LazyMotion, domAnimation, m, AnimatePresence } from 'motion/react';
+import { staggerContainer, fadeUpVariant } from '@/lib/motion';
 
 interface ExploreClientProps {
   initialPrograms: InternshipProgram[];
@@ -195,68 +197,93 @@ export function ExploreClient({ initialPrograms, initialFilters, initialSearch, 
       </div>
 
       {/* ─── Index Rows ─── */}
-      <div className="transition-opacity duration-150">
-        {isPending ? (
-          /* Skeleton */
-          <div className="space-y-0">
-            {[1, 2, 3, 4, 5].map((n) => (
-              <div key={n} className="py-7 border-b border-white/[0.04] animate-pulse">
-                <div className="flex items-start gap-6">
-                  <div className="w-8 h-4 bg-white/[0.04] rounded" />
-                  <div className="flex-1 space-y-3">
-                    <div className="h-3 bg-white/[0.04] rounded w-32" />
-                    <div className="h-5 bg-white/[0.04] rounded w-64" />
-                    <div className="h-3 bg-white/[0.04] rounded w-48" />
+      <div className="relative min-h-[400px]">
+        <LazyMotion features={domAnimation}>
+          <AnimatePresence mode="wait">
+            {isPending ? (
+              /* Skeleton */
+              <m.div
+                key="skeleton"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="space-y-0"
+              >
+                {[1, 2, 3, 4, 5].map((n) => (
+                  <div key={n} className="py-7 border-b border-white/[0.04] animate-pulse">
+                    <div className="flex items-start gap-6">
+                      <div className="w-8 h-4 bg-white/[0.04] rounded" />
+                      <div className="flex-1 space-y-3">
+                        <div className="h-3 bg-white/[0.04] rounded w-32" />
+                        <div className="h-5 bg-white/[0.04] rounded w-64" />
+                        <div className="h-3 bg-white/[0.04] rounded w-48" />
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : initialPrograms.length > 0 ? (
-          /* Index */
-          <div>
-            {initialPrograms.map((program, i) => (
-              <IndexRow key={program._id} data={program} index={i} />
-            ))}
-          </div>
-        ) : (
-          /* Empty State */
-          <div className="py-20 md:py-28">
-            <div className="flex items-center gap-3 mb-6">
-              <SearchX className="w-5 h-5 text-foreground-subtle" />
-              <h3 className="text-[24px] md:text-[32px] font-heading font-bold uppercase tracking-tight text-foreground">
-                {hasActiveFiltersOrSearch ? 'Nothing found.' : 'No internships listed yet.'}
-              </h3>
-            </div>
-            {hasActiveFiltersOrSearch ? (
-              <div className="space-y-4">
-                <p className="text-[15px] text-foreground-muted max-w-md">
-                  No internships match the current filters or search.
-                </p>
-                <button
-                  onClick={handleReset}
-                  className="inline-flex items-center gap-2 text-[13px] font-heading font-bold uppercase tracking-[0.1em] text-accent hover:text-foreground transition-colors cursor-pointer group"
-                >
-                  <span>Clear Filters</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
-              </div>
+                ))}
+              </m.div>
+            ) : initialPrograms.length > 0 ? (
+              /* Index */
+              <m.div
+                key="results"
+                initial="hidden"
+                animate="visible"
+                exit={{ opacity: 0 }}
+                variants={staggerContainer}
+              >
+                {initialPrograms.map((program, i) => (
+                  <m.div key={program._id} layout variants={fadeUpVariant}>
+                    <IndexRow data={program} index={i} />
+                  </m.div>
+                ))}
+              </m.div>
             ) : (
-              <div className="space-y-8">
-                <p className="text-[15px] text-foreground-muted max-w-md">
-                  We&apos;re building this index with the student community. Know of an internship? Report it and help the next student.
-                </p>
-                <Link
-                  href="/review"
-                  className="inline-flex items-center gap-3 h-[44px] px-6 bg-white !text-black font-heading font-bold text-[13px] uppercase tracking-[0.1em] rounded-[var(--radius)] hover:bg-white/90 hover:!text-black hover:-translate-y-[1px] hover:shadow-[0_4px_14px_rgba(0,0,0,0.18)] active:translate-y-0 transition-all duration-200 ease-out select-none"
-                >
-                  <span>Report an Internship</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
+              /* Empty State */
+              <m.div
+                key="empty"
+                initial="hidden"
+                animate="visible"
+                exit={{ opacity: 0 }}
+                variants={fadeUpVariant}
+                className="py-20 md:py-28"
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <SearchX className="w-5 h-5 text-foreground-subtle" />
+                  <h3 className="text-[24px] md:text-[32px] font-heading font-bold uppercase tracking-tight text-foreground">
+                    {hasActiveFiltersOrSearch ? 'Nothing found.' : 'No internships listed yet.'}
+                  </h3>
+                </div>
+                {hasActiveFiltersOrSearch ? (
+                  <div className="space-y-4">
+                    <p className="text-[15px] text-foreground-muted max-w-md">
+                      No internships match the current filters or search.
+                    </p>
+                    <button
+                      onClick={handleReset}
+                      className="inline-flex items-center gap-2 text-[13px] font-heading font-bold uppercase tracking-[0.1em] text-accent hover:text-foreground transition-colors cursor-pointer group"
+                    >
+                      <span>Clear Filters</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-8">
+                    <p className="text-[15px] text-foreground-muted max-w-md">
+                      We&apos;re building this index with the student community. Know of an internship? Report it and help the next student.
+                    </p>
+                    <Link
+                      href="/review"
+                      className="inline-flex items-center gap-3 h-[44px] px-6 bg-white !text-black font-heading font-bold text-[13px] uppercase tracking-[0.1em] rounded-[var(--radius)] hover:bg-white/90 hover:!text-black hover:-translate-y-[1px] hover:shadow-[0_4px_14px_rgba(0,0,0,0.18)] active:translate-y-0 transition-all duration-200 ease-out select-none"
+                    >
+                      <span>Report an Internship</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </div>
+                )}
+              </m.div>
             )}
-          </div>
-        )}
+          </AnimatePresence>
+        </LazyMotion>
       </div>
     </div>
   );

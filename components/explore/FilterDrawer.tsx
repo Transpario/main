@@ -144,7 +144,7 @@ export function FilterDrawer({ filters, setFilters, onReset }: FilterDrawerProps
             </div>
 
             {/* Filter groups */}
-            <div className="flex-1 overflow-y-auto">
+            <div className="flex-1 overflow-y-auto" data-lenis-prevent="true">
               {categories.map(cat => {
                 const options = FILTER_OPTIONS[cat];
                 const activeInGroup = (filters[cat] || []).length;

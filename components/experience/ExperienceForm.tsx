@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ArrowRight, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, ArrowLeft, CheckCircle2, ChevronDown, Loader2 } from 'lucide-react';
 import { z } from 'zod';
+import { useLenis } from 'lenis/react';
+import { LazyMotion, domAnimation, m, AnimatePresence } from 'motion/react';
 
 export const reviewFormSchema = z.object({
   company: z.string().min(1, "Company name is required").max(100, "Too long"),
@@ -69,6 +71,7 @@ export function ExperienceForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
+  const [direction, setDirection] = useState(1);
 
   const totalSteps = 5;
 
@@ -126,16 +129,34 @@ export function ExperienceForm() {
     return stepIsValid;
   };
 
+  const lenis = useLenis();
+  const formRef = React.useRef<HTMLDivElement>(null);
+
+  const scrollToFormTop = () => {
+    if (formRef.current) {
+      if (lenis) {
+        // Scroll slightly above the form for breathing room
+        lenis.scrollTo(formRef.current, { offset: -100, immediate: false });
+      } else {
+        formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   const nextStep = () => {
     if (validateStep()) {
+      setDirection(1);
       setStep((s) => Math.min(s + 1, totalSteps));
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      scrollToFormTop();
     }
   };
   
   const prevStep = () => {
+    setDirection(-1);
     setStep((s) => Math.max(s - 1, 1));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    scrollToFormTop();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -169,40 +190,88 @@ export function ExperienceForm() {
 
   if (isSuccess) {
     return (
-      <div className="py-20 text-center animate-in fade-in zoom-in duration-500">
-        <div className="w-16 h-16 bg-white/[0.04] border border-white/10 rounded-full flex items-center justify-center mx-auto mb-8">
-          <CheckCircle2 className="w-8 h-8 text-accent" />
+      <LazyMotion features={domAnimation}>
+        <div className="py-20 text-center">
+          <m.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.4 }}
+            className="w-20 h-20 bg-white/[0.04] border border-white/10 rounded-full flex items-center justify-center mx-auto mb-8"
+          >
+            <m.svg
+              width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-accent"
+            >
+              <m.path
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
+                d="M20 6L9 17l-5-5"
+              />
+            </m.svg>
+          </m.div>
+          <m.h2 
+            initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.4 }}
+            className="text-[24px] md:text-[32px] font-heading font-bold uppercase tracking-tight text-foreground mb-4"
+          >
+            Thank you.
+          </m.h2>
+          <m.p 
+            initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.5 }}
+            className="text-[16px] text-foreground-muted mb-8 max-w-md mx-auto leading-relaxed"
+          >
+            Thanks. Your report will be reviewed before it appears on Transpario.
+          </m.p>
+          <m.button
+            initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.6 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => {
+              setData(initialData);
+              setStep(1);
+              setIsSuccess(false);
+            }}
+            className="text-[13px] font-heading font-bold uppercase tracking-[0.1em] text-foreground hover:text-accent transition-colors cursor-pointer"
+          >
+            Submit Another
+          </m.button>
         </div>
-        <h2 className="text-[24px] md:text-[32px] font-heading font-bold uppercase tracking-tight text-foreground mb-4">
-          Thank you.
-        </h2>
-        <p className="text-[16px] text-foreground-muted mb-8 max-w-md mx-auto leading-relaxed">
-          Thanks. Your report will be reviewed before it appears on Transpario.
-        </p>
-        <button
-          onClick={() => {
-            setData(initialData);
-            setStep(1);
-            setIsSuccess(false);
-          }}
-          className="text-[13px] font-heading font-bold uppercase tracking-[0.1em] text-foreground hover:text-accent transition-colors cursor-pointer"
-        >
-          Submit Another
-        </button>
-      </div>
+      </LazyMotion>
     );
   }
 
+  const stepVariants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? 30 : -30,
+      opacity: 0,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      transition: { duration: 0.3, ease: "easeOut" as const }
+    },
+    exit: (direction: number) => ({
+      x: direction < 0 ? 30 : -30,
+      opacity: 0,
+      transition: { duration: 0.2, ease: "easeIn" as const }
+    })
+  };
+
   return (
-    <div className="max-w-2xl mx-auto py-12 md:py-20">
+    <LazyMotion features={domAnimation}>
+      <div ref={formRef} className="max-w-2xl mx-auto py-12 md:py-20">
+        <div className="bg-black/50 backdrop-blur-md border border-white/[0.08] rounded-2xl p-6 md:p-10 relative overflow-hidden min-h-[500px] shadow-2xl">
+
       
       {/* Progress indicator */}
-      <div className="flex items-center gap-2 mb-16">
+      <div className="flex items-center gap-2 mb-12">
         {Array.from({ length: totalSteps }).map((_, i) => (
-          <div 
-            key={i} 
-            className={`h-1 flex-1 transition-colors duration-300 ${i + 1 <= step ? 'bg-accent' : 'bg-white/[0.06]'}`}
-          />
+          <div key={i} className="h-1 flex-1 bg-white/[0.06] rounded-full overflow-hidden relative">
+            <m.div
+              className="absolute inset-0 bg-accent rounded-full origin-left"
+              initial={false}
+              animate={{ scaleX: i + 1 <= step ? 1 : 0 }}
+              transition={{ ease: "easeInOut", duration: 0.4 }}
+            />
+          </div>
         ))}
       </div>
 
@@ -211,255 +280,347 @@ export function ExperienceForm() {
         {/* Honeypot */}
         <input type="text" name="honeypot" value={data.honeypot} onChange={handleChange} className="hidden" tabIndex={-1} autoComplete="off" />
 
-        {/* STEP 1 */}
-        <div className={`space-y-10 transition-opacity duration-300 ${step === 1 ? 'block opacity-100' : 'hidden opacity-0 h-0 overflow-hidden'}`}>
-          <div>
-            <span className="block text-[11px] font-heading font-bold uppercase tracking-[0.14em] text-foreground-subtle mb-3">
-              01 / The Basics
-            </span>
-            <h2 className="text-[24px] md:text-[32px] font-heading font-bold uppercase tracking-tight text-foreground mb-2">
-              Where did you intern?
-            </h2>
-          </div>
-
-          <div className="space-y-8">
-            <InputField label="Company / Organization Name *" name="company" value={data.company} onChange={handleChange} error={errors.company} placeholder="e.g. TechCorp Global" autoFocus={step === 1} />
-            <InputField label="Internship Title / Role *" name="role" value={data.role} onChange={handleChange} error={errors.role} placeholder="e.g. Software Engineering Intern" />
-            <SelectField label="Where did you find it? *" name="platform" value={data.platform} onChange={handleChange} error={errors.platform} options={[
-              { value: '', label: 'Select platform...' },
-              { value: 'linkedin', label: 'LinkedIn' },
-              { value: 'internshala', label: 'Internshala' },
-              { value: 'company_website', label: 'Company Website' },
-              { value: 'social', label: 'Instagram / WhatsApp / Telegram' },
-              { value: 'other', label: 'Other' },
-            ]} />
-            <InputField label="Link to the listing (Optional)" name="listingUrl" value={data.listingUrl} onChange={handleChange} error={errors.listingUrl} placeholder="https://..." />
-          </div>
-        </div>
-
-        {/* STEP 2 */}
-        <div className={`space-y-10 transition-opacity duration-300 ${step === 2 ? 'block opacity-100' : 'hidden opacity-0 h-0 overflow-hidden'}`}>
-          <div>
-            <span className="block text-[11px] font-heading font-bold uppercase tracking-[0.14em] text-foreground-subtle mb-3">
-              02 / Logistics
-            </span>
-            <h2 className="text-[24px] md:text-[32px] font-heading font-bold uppercase tracking-tight text-foreground mb-2">
-              When & Where?
-            </h2>
-          </div>
-
-          <div className="space-y-8">
-            <InputField label="Duration" name="duration" value={data.duration} onChange={handleChange} error={errors.duration} placeholder="e.g. 3 Months, 6 Weeks" autoFocus={step === 2} />
-            <SelectField label="Mode" name="mode" value={data.mode} onChange={handleChange} error={errors.mode} options={[
-              { value: '', label: 'Select mode...' },
-              { value: 'remote', label: 'Remote' },
-              { value: 'onsite', label: 'On-site' },
-              { value: 'hybrid', label: 'Hybrid' },
-            ]} />
-            <InputField label="Location (City, State)" name="location" value={data.location} onChange={handleChange} error={errors.location} placeholder="e.g. Bangalore, KA" />
-            <InputField label="When did you intern?" name="period" value={data.period} onChange={handleChange} error={errors.period} placeholder="e.g. Summer 2026, May-July" />
-          </div>
-        </div>
-
-        {/* STEP 3 */}
-        <div className={`space-y-10 transition-opacity duration-300 ${step === 3 ? 'block opacity-100' : 'hidden opacity-0 h-0 overflow-hidden'}`}>
-          <div>
-            <span className="block text-[11px] font-heading font-bold uppercase tracking-[0.14em] text-foreground-subtle mb-3">
-              03 / Compensation & Fees
-            </span>
-            <h2 className="text-[24px] md:text-[32px] font-heading font-bold uppercase tracking-tight text-foreground mb-2">
-              What did you receive (or pay)?
-            </h2>
-          </div>
-
-          <div className="space-y-8">
-            <SelectField label="Payment Structure *" name="paymentType" value={data.paymentType} onChange={handleChange} error={errors.paymentType} options={[
-              { value: '', label: 'Select payment type...' },
-              { value: 'paid', label: 'Paid Salary / Fixed Wage' },
-              { value: 'unpaid', label: 'Unpaid' },
-              { value: 'stipend_based', label: 'Stipend / Performance-based' },
-            ]} autoFocus={step === 3} />
-            
-            {data.paymentType === 'stipend_based' && (
-              <InputField label="Stipend Amount (per month)" name="stipendAmount" value={data.stipendAmount} onChange={handleChange} error={errors.stipendAmount} placeholder="e.g. ₹5000 / month, or up to ₹10k based on sales" />
-            )}
-
-            <SelectField label="Was there any fee? (registration/training/certificate/other) *" name="hasFee" value={data.hasFee} onChange={handleChange} error={errors.hasFee} options={[
-              { value: '', label: 'Select...' },
-              { value: 'no', label: 'No, completely free' },
-              { value: 'yes', label: 'Yes, there was a fee' },
-            ]} />
-
-            {data.hasFee === 'yes' && (
-              <InputField label="Fee Amount & Reason" name="feeAmount" value={data.feeAmount} onChange={handleChange} error={errors.feeAmount} placeholder="e.g. ₹1000 for training, ₹500 for certificate" />
-            )}
-
-            <SelectField label="Was a certificate provided? *" name="certificateProvided" value={data.certificateProvided} onChange={handleChange} error={errors.certificateProvided} options={[
-              { value: '', label: 'Select...' },
-              { value: 'yes', label: 'Yes' },
-              { value: 'no', label: 'No' },
-            ]} />
-          </div>
-        </div>
-
-        {/* STEP 4 */}
-        <div className={`space-y-10 transition-opacity duration-300 ${step === 4 ? 'block opacity-100' : 'hidden opacity-0 h-0 overflow-hidden'}`}>
-          <div>
-            <span className="block text-[11px] font-heading font-bold uppercase tracking-[0.14em] text-foreground-subtle mb-3">
-              04 / The Experience
-            </span>
-            <h2 className="text-[24px] md:text-[32px] font-heading font-bold uppercase tracking-tight text-foreground mb-2">
-              What actually happened?
-            </h2>
-          </div>
-
-          <div className="space-y-8">
-            <SelectField label="Selection Process *" name="selectionProcess" value={data.selectionProcess} onChange={handleChange} error={errors.selectionProcess} options={[
-              { value: '', label: 'Select process...' },
-              { value: 'interview', label: 'Interview' },
-              { value: 'test', label: 'Test / Assignment' },
-              { value: 'none', label: 'Direct Entry / None' },
-              { value: 'other', label: 'Other' },
-            ]} autoFocus={step === 4} />
-
-            <TextAreaField label="What work did you actually do?" name="workDescription" value={data.workDescription} onChange={handleChange} error={errors.workDescription} placeholder="Describe your daily tasks and main projects..." />
-            <TextAreaField label="What was unexpected or challenging?" name="unexpected" value={data.unexpected} onChange={handleChange} error={errors.unexpected} placeholder="Things that surprised you, or were harder than expected..." />
-            <TextAreaField label="Main takeaway (short)" name="keyTakeaway" value={data.keyTakeaway} onChange={handleChange} error={errors.keyTakeaway} placeholder="Sum up your experience in a sentence or two..." />
-          </div>
-        </div>
-
-        {/* STEP 5 */}
-        <div className={`space-y-10 transition-opacity duration-300 ${step === 5 ? 'block opacity-100' : 'hidden opacity-0 h-0 overflow-hidden'}`}>
-          <div>
-            <span className="block text-[11px] font-heading font-bold uppercase tracking-[0.14em] text-foreground-subtle mb-3">
-              05 / Verification
-            </span>
-            <h2 className="text-[24px] md:text-[32px] font-heading font-bold uppercase tracking-tight text-foreground mb-2">
-              Final details.
-            </h2>
-          </div>
-
-          <div className="space-y-8">
-            <InputField label="Proof link (Optional)" name="proofLink" value={data.proofLink} onChange={handleChange} error={errors.proofLink} placeholder="Link to offer letter screenshot, completion cert, etc." autoFocus={step === 5} />
-            <InputField label="Contact Email (Optional)" name="contactEmail" type="email" value={data.contactEmail} onChange={handleChange} error={errors.contactEmail} placeholder="Never published. We may email to verify details." />
-            
-            <div className="pt-4 border-t border-white/[0.06]">
-              <label className="flex items-start gap-4 cursor-pointer group">
-                <div className="pt-1">
-                  <input type="checkbox" name="confirmation" checked={data.confirmation} onChange={handleChange} className="w-5 h-5 rounded border-white/[0.2] bg-transparent text-accent focus:ring-accent focus:ring-offset-background" />
-                </div>
+        <div className="relative min-h-[350px]">
+          <AnimatePresence mode="wait" custom={direction} initial={false}>
+            {step === 1 && (
+              <m.div key="step1" custom={direction} variants={stepVariants} initial="enter" animate="center" exit="exit" className="space-y-10">
                 <div>
-                  <span className={`block text-[15px] ${data.confirmation ? 'text-foreground' : 'text-foreground-muted group-hover:text-foreground'} transition-colors`}>
-                    I confirm this report is truthful and based on my own experience. *
+                  <span className="block text-[11px] font-heading font-bold uppercase tracking-[0.14em] text-foreground-subtle mb-3">
+                    01 / The Basics
                   </span>
-                  {errors.confirmation && <span className="block text-[13px] text-red-500 mt-1">{errors.confirmation}</span>}
+                  <h2 className="text-[24px] md:text-[32px] font-heading font-bold uppercase tracking-tight text-foreground mb-2">
+                    Where did you intern?
+                  </h2>
                 </div>
-              </label>
-            </div>
-          </div>
+
+                <div className="space-y-8">
+                  <InputField label="Company / Organization Name *" name="company" value={data.company} onChange={handleChange} error={errors.company} placeholder="e.g. TechCorp Global" autoFocus />
+                  <InputField label="Internship Title / Role *" name="role" value={data.role} onChange={handleChange} error={errors.role} placeholder="e.g. Software Engineering Intern" />
+                  <SelectField label="Where did you find it? *" name="platform" value={data.platform} onChange={handleChange} error={errors.platform} options={[
+                    { value: '', label: 'Select platform...' },
+                    { value: 'linkedin', label: 'LinkedIn' },
+                    { value: 'internshala', label: 'Internshala' },
+                    { value: 'company_website', label: 'Company Website' },
+                    { value: 'social', label: 'Instagram / WhatsApp / Telegram' },
+                    { value: 'other', label: 'Other' },
+                  ]} />
+                  <InputField label="Link to the listing (Optional)" name="listingUrl" value={data.listingUrl} onChange={handleChange} error={errors.listingUrl} placeholder="https://..." />
+                </div>
+              </m.div>
+            )}
+
+            {step === 2 && (
+              <m.div key="step2" custom={direction} variants={stepVariants} initial="enter" animate="center" exit="exit" className="space-y-10">
+                <div>
+                  <span className="block text-[11px] font-heading font-bold uppercase tracking-[0.14em] text-foreground-subtle mb-3">
+                    02 / Logistics
+                  </span>
+                  <h2 className="text-[24px] md:text-[32px] font-heading font-bold uppercase tracking-tight text-foreground mb-2">
+                    When & Where?
+                  </h2>
+                </div>
+
+                <div className="space-y-8">
+                  <InputField label="Duration" name="duration" value={data.duration} onChange={handleChange} error={errors.duration} placeholder="e.g. 3 Months, 6 Weeks" autoFocus />
+                  <SelectField label="Mode" name="mode" value={data.mode} onChange={handleChange} error={errors.mode} options={[
+                    { value: '', label: 'Select mode...' },
+                    { value: 'remote', label: 'Remote' },
+                    { value: 'onsite', label: 'On-site' },
+                    { value: 'hybrid', label: 'Hybrid' },
+                  ]} />
+                  <InputField label="Location (City, State)" name="location" value={data.location} onChange={handleChange} error={errors.location} placeholder="e.g. Bangalore, KA" />
+                  <InputField label="When did you intern?" name="period" value={data.period} onChange={handleChange} error={errors.period} placeholder="e.g. Summer 2026, May-July" />
+                </div>
+              </m.div>
+            )}
+
+            {step === 3 && (
+              <m.div key="step3" custom={direction} variants={stepVariants} initial="enter" animate="center" exit="exit" className="space-y-10">
+                <div>
+                  <span className="block text-[11px] font-heading font-bold uppercase tracking-[0.14em] text-foreground-subtle mb-3">
+                    03 / Compensation & Fees
+                  </span>
+                  <h2 className="text-[24px] md:text-[32px] font-heading font-bold uppercase tracking-tight text-foreground mb-2">
+                    What did you receive (or pay)?
+                  </h2>
+                </div>
+
+                <div className="space-y-8">
+                  <SelectField label="Payment Structure *" name="paymentType" value={data.paymentType} onChange={handleChange} error={errors.paymentType} options={[
+                    { value: '', label: 'Select payment type...' },
+                    { value: 'paid', label: 'Paid Salary / Fixed Wage' },
+                    { value: 'unpaid', label: 'Unpaid' },
+                    { value: 'stipend_based', label: 'Stipend / Performance-based' },
+                  ]} autoFocus />
+                  
+                  <AnimatePresence>
+                    {data.paymentType === 'stipend_based' && (
+                      <m.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
+                        <div className="pt-2 pb-1">
+                          <InputField label="Stipend Amount (per month)" name="stipendAmount" value={data.stipendAmount} onChange={handleChange} error={errors.stipendAmount} placeholder="e.g. ₹5000 / month, or up to ₹10k based on sales" />
+                        </div>
+                      </m.div>
+                    )}
+                  </AnimatePresence>
+
+                  <SelectField label="Was there any fee? (registration/training/certificate/other) *" name="hasFee" value={data.hasFee} onChange={handleChange} error={errors.hasFee} options={[
+                    { value: '', label: 'Select...' },
+                    { value: 'no', label: 'No, completely free' },
+                    { value: 'yes', label: 'Yes, there was a fee' },
+                  ]} />
+
+                  <AnimatePresence>
+                    {data.hasFee === 'yes' && (
+                      <m.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
+                        <div className="pt-2 pb-1">
+                          <InputField label="Fee Amount & Reason" name="feeAmount" value={data.feeAmount} onChange={handleChange} error={errors.feeAmount} placeholder="e.g. ₹1000 for training, ₹500 for certificate" />
+                        </div>
+                      </m.div>
+                    )}
+                  </AnimatePresence>
+
+                  <SelectField label="Was a certificate provided? *" name="certificateProvided" value={data.certificateProvided} onChange={handleChange} error={errors.certificateProvided} options={[
+                    { value: '', label: 'Select...' },
+                    { value: 'yes', label: 'Yes' },
+                    { value: 'no', label: 'No' },
+                  ]} />
+                </div>
+              </m.div>
+            )}
+
+            {step === 4 && (
+              <m.div key="step4" custom={direction} variants={stepVariants} initial="enter" animate="center" exit="exit" className="space-y-10">
+                <div>
+                  <span className="block text-[11px] font-heading font-bold uppercase tracking-[0.14em] text-foreground-subtle mb-3">
+                    04 / The Experience
+                  </span>
+                  <h2 className="text-[24px] md:text-[32px] font-heading font-bold uppercase tracking-tight text-foreground mb-2">
+                    What actually happened?
+                  </h2>
+                </div>
+
+                <div className="space-y-8">
+                  <SelectField label="Selection Process *" name="selectionProcess" value={data.selectionProcess} onChange={handleChange} error={errors.selectionProcess} options={[
+                    { value: '', label: 'Select process...' },
+                    { value: 'interview', label: 'Interview' },
+                    { value: 'test', label: 'Test / Assignment' },
+                    { value: 'none', label: 'Direct Entry / None' },
+                    { value: 'other', label: 'Other' },
+                  ]} autoFocus />
+
+                  <TextAreaField label="What work did you actually do?" name="workDescription" value={data.workDescription} onChange={handleChange} error={errors.workDescription} placeholder="Describe your daily tasks and main projects..." />
+                  <TextAreaField label="What was unexpected or challenging?" name="unexpected" value={data.unexpected} onChange={handleChange} error={errors.unexpected} placeholder="Things that surprised you, or were harder than expected..." />
+                  <TextAreaField label="Main takeaway (short)" name="keyTakeaway" value={data.keyTakeaway} onChange={handleChange} error={errors.keyTakeaway} placeholder="Sum up your experience in a sentence or two..." />
+                </div>
+              </m.div>
+            )}
+
+            {step === 5 && (
+              <m.div key="step5" custom={direction} variants={stepVariants} initial="enter" animate="center" exit="exit" className="space-y-10">
+                <div>
+                  <span className="block text-[11px] font-heading font-bold uppercase tracking-[0.14em] text-foreground-subtle mb-3">
+                    05 / Verification
+                  </span>
+                  <h2 className="text-[24px] md:text-[32px] font-heading font-bold uppercase tracking-tight text-foreground mb-2">
+                    Final details.
+                  </h2>
+                </div>
+
+                <div className="space-y-8">
+                  <InputField label="Proof link (Optional)" name="proofLink" value={data.proofLink} onChange={handleChange} error={errors.proofLink} placeholder="Link to offer letter screenshot, completion cert, etc." autoFocus />
+                  <InputField label="Contact Email (Optional)" name="contactEmail" type="email" value={data.contactEmail} onChange={handleChange} error={errors.contactEmail} placeholder="Never published. We may email to verify details." />
+                  
+                  <div className="pt-4 border-t border-white/[0.06]">
+                    <label className="flex items-start gap-4 cursor-pointer group">
+                      <div className="pt-1">
+                        <input type="checkbox" name="confirmation" checked={data.confirmation} onChange={handleChange} className="w-5 h-5 rounded border-white/[0.2] bg-transparent text-accent focus:ring-accent focus:ring-offset-background" />
+                      </div>
+                      <div>
+                        <span className={`block text-[15px] ${data.confirmation ? 'text-foreground' : 'text-foreground-muted group-hover:text-foreground'} transition-colors`}>
+                          I confirm this report is truthful and based on my own experience. *
+                        </span>
+                        <AnimatePresence>
+                          {errors.confirmation && (
+                            <m.span initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="block text-[13px] text-red-400 mt-1">
+                              {errors.confirmation}
+                            </m.span>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              </m.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Error State */}
-        {submitError && (
-          <div className="mt-8 p-4 border border-red-500/20 bg-red-500/5 rounded-[var(--radius)] text-red-400 text-[14px]">
-            {submitError}
-          </div>
-        )}
+        <AnimatePresence>
+          {submitError && (
+            <m.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, height: 0 }} className="mt-8 p-4 border border-red-500/20 bg-red-500/5 rounded-[var(--radius)] text-red-400 text-[14px]">
+              {submitError}
+            </m.div>
+          )}
+        </AnimatePresence>
 
         {/* Navigation */}
         <div className="mt-16 flex items-center justify-between pt-8 border-t border-white/[0.06]">
           {step > 1 ? (
-            <button
+            <m.button
+              whileTap={{ scale: 0.97 }}
               type="button"
               onClick={prevStep}
               className="inline-flex items-center gap-2 text-[12px] font-heading font-bold uppercase tracking-[0.1em] text-foreground-subtle hover:text-foreground transition-colors group cursor-pointer"
             >
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
               <span>Back</span>
-            </button>
+            </m.button>
           ) : (
             <div />
           )}
 
           {step < totalSteps ? (
-            <button
+            <m.button
+              whileTap={{ scale: 0.97 }}
               type="button"
               onClick={nextStep}
               className="inline-flex items-center gap-2 h-[44px] px-6 bg-white !text-black font-heading font-bold text-[13px] uppercase tracking-[0.1em] rounded-[var(--radius)] hover:bg-white/90 transition-colors group cursor-pointer"
             >
               <span>Continue</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
+            </m.button>
           ) : (
-            <button
+            <m.button
+              whileTap={!isSubmitting ? { scale: 0.97 } : undefined}
               type="submit"
               disabled={isSubmitting}
               className="inline-flex items-center gap-2 h-[44px] px-6 bg-accent text-white font-heading font-bold text-[13px] uppercase tracking-[0.1em] rounded-[var(--radius)] hover:bg-accent/90 transition-colors disabled:opacity-50 cursor-pointer"
             >
-              <span>{isSubmitting ? 'Submitting...' : 'Submit Notes'}</span>
-            </button>
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Submitting...</span>
+                </>
+              ) : (
+                <>
+                  <span>Submit Notes</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </>
+              )}
+            </m.button>
           )}
         </div>
       </form>
-    </div>
+        </div>
+      </div>
+    </LazyMotion>
   );
 }
 
 // Reusable Components
 function InputField({ label, name, value, onChange, placeholder, autoFocus, type = 'text', error }: any) {
+  const [isFocused, setIsFocused] = useState(false);
   return (
-    <div>
-      <label className="block text-[14px] font-heading font-semibold text-foreground mb-3">{label}</label>
-      <input
-        type={type}
-        name={name}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        autoFocus={autoFocus}
-        className={`w-full bg-transparent border-b ${error ? 'border-red-500' : 'border-white/[0.1] focus:border-accent'} pb-3 text-[16px] text-foreground placeholder:text-foreground-subtle focus:outline-none transition-colors font-body`}
-      />
-      {error && <span className="block text-[13px] text-red-500 mt-2">{error}</span>}
-    </div>
+    <m.div animate={error ? "shake" : ""} variants={{ shake: { x: [0, -5, 5, -5, 5, 0], transition: { duration: 0.4 } } }}>
+      <label className={`block text-[14px] font-heading font-semibold mb-3 ${error ? 'text-red-400' : 'text-foreground'}`}>{label}</label>
+      <div className="relative">
+        <input
+          type={type}
+          name={name}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          autoFocus={autoFocus}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          className="w-full bg-transparent pb-3 text-[16px] text-foreground placeholder:text-foreground-muted focus:outline-none font-body border-b border-white/[0.1]"
+        />
+        <m.div 
+          className={`absolute bottom-0 left-0 h-[2px] ${error ? 'bg-red-500' : 'bg-accent'}`}
+          initial={false} animate={{ scaleX: isFocused ? 1 : 0 }} transition={{ duration: 0.2 }} style={{ originX: 0 }}
+        />
+      </div>
+      <AnimatePresence>
+        {error && (
+          <m.span initial={{ opacity: 0, y: -10, height: 0 }} animate={{ opacity: 1, y: 0, height: 'auto' }} exit={{ opacity: 0, y: -10, height: 0 }} className="block text-[13px] text-red-400 mt-2">
+            {error}
+          </m.span>
+        )}
+      </AnimatePresence>
+    </m.div>
   );
 }
 
 function TextAreaField({ label, name, value, onChange, placeholder, autoFocus, error }: any) {
+  const [isFocused, setIsFocused] = useState(false);
   return (
-    <div>
-      <label className="block text-[14px] font-heading font-semibold text-foreground mb-3">{label}</label>
-      <textarea
-        name={name}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        autoFocus={autoFocus}
-        rows={4}
-        className={`w-full bg-transparent border-b ${error ? 'border-red-500' : 'border-white/[0.1] focus:border-accent'} pb-3 text-[16px] text-foreground placeholder:text-foreground-subtle focus:outline-none transition-colors font-body resize-none`}
-      />
-      {error && <span className="block text-[13px] text-red-500 mt-2">{error}</span>}
-    </div>
+    <m.div animate={error ? "shake" : ""} variants={{ shake: { x: [0, -5, 5, -5, 5, 0], transition: { duration: 0.4 } } }}>
+      <label className={`block text-[14px] font-heading font-semibold mb-3 ${error ? 'text-red-400' : 'text-foreground'}`}>{label}</label>
+      <div className="relative">
+        <textarea
+          name={name}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          autoFocus={autoFocus}
+          rows={4}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          className="w-full bg-transparent pb-3 text-[16px] text-foreground placeholder:text-foreground-muted focus:outline-none font-body resize-none border-b border-white/[0.1]"
+        />
+        <m.div 
+          className={`absolute bottom-[3px] left-0 h-[2px] ${error ? 'bg-red-500' : 'bg-accent'}`}
+          initial={false} animate={{ scaleX: isFocused ? 1 : 0 }} transition={{ duration: 0.2 }} style={{ originX: 0 }}
+        />
+      </div>
+      <AnimatePresence>
+        {error && (
+          <m.span initial={{ opacity: 0, y: -10, height: 0 }} animate={{ opacity: 1, y: 0, height: 'auto' }} exit={{ opacity: 0, y: -10, height: 0 }} className="block text-[13px] text-red-400 mt-2">
+            {error}
+          </m.span>
+        )}
+      </AnimatePresence>
+    </m.div>
   );
 }
 
 function SelectField({ label, name, value, onChange, options, autoFocus, error }: any) {
+  const [isFocused, setIsFocused] = useState(false);
   return (
-    <div>
-      <label className="block text-[14px] font-heading font-semibold text-foreground mb-3">{label}</label>
-      <select
-        name={name}
-        value={value}
-        onChange={onChange}
-        autoFocus={autoFocus}
-        className={`w-full bg-transparent border-b ${error ? 'border-red-500' : 'border-white/[0.1] focus:border-accent'} pb-3 text-[16px] text-foreground focus:outline-none transition-colors font-body appearance-none cursor-pointer`}
-      >
-        {options.map((opt: any) => (
-          <option key={opt.value} value={opt.value} className="bg-surface text-foreground">
-            {opt.label}
-          </option>
-        ))}
-      </select>
-      {error && <span className="block text-[13px] text-red-500 mt-2">{error}</span>}
-    </div>
+    <m.div animate={error ? "shake" : ""} variants={{ shake: { x: [0, -5, 5, -5, 5, 0], transition: { duration: 0.4 } } }}>
+      <label className={`block text-[14px] font-heading font-semibold mb-3 ${error ? 'text-red-400' : 'text-foreground'}`}>{label}</label>
+      <div className="relative">
+        <select
+          name={name}
+          value={value}
+          onChange={onChange}
+          autoFocus={autoFocus}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          className={`w-full bg-transparent pb-3 text-[16px] focus:outline-none font-body appearance-none cursor-pointer border-b border-white/[0.1] ${value === '' ? 'text-foreground-muted' : 'text-foreground'}`}
+        >
+          {options.map((opt: any) => (
+            <option key={opt.value} value={opt.value} className="bg-surface text-foreground">
+              {opt.label}
+            </option>
+          ))}
+        </select>
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none mb-3">
+          <ChevronDown className="w-5 h-5 text-foreground-subtle" />
+        </div>
+        <m.div 
+          className={`absolute bottom-0 left-0 h-[2px] ${error ? 'bg-red-500' : 'bg-accent'}`}
+          initial={false} animate={{ scaleX: isFocused ? 1 : 0 }} transition={{ duration: 0.2 }} style={{ originX: 0 }}
+        />
+      </div>
+      <AnimatePresence>
+        {error && (
+          <m.span initial={{ opacity: 0, y: -10, height: 0 }} animate={{ opacity: 1, y: 0, height: 'auto' }} exit={{ opacity: 0, y: -10, height: 0 }} className="block text-[13px] text-red-400 mt-2">
+            {error}
+          </m.span>
+        )}
+      </AnimatePresence>
+    </m.div>
   );
 }

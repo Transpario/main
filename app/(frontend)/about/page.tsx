@@ -6,6 +6,7 @@ import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import { Metadata } from 'next';
 import { Quote, Scale, ShieldCheck, ArrowRight } from 'lucide-react';
+import { Reveal, RevealGroup } from '@/components/Reveal';
 
 export const metadata: Metadata = {
   title: 'About Transpario — Mission & Principles',
@@ -18,38 +19,46 @@ export default function AboutPage() {
       {/* Intro / Hero Header */}
       <Section>
         <Container className="max-w-4xl">
-          <div className="mb-8">
-            <SectionLabel className="mb-3">OUR MISSION & VALUES</SectionLabel>
-            <h1 className="text-h1 uppercase tracking-tight text-foreground mb-4">
-              About Transpario
-            </h1>
-            <p className="text-body-lg text-foreground font-medium leading-relaxed max-w-3xl">
-              Transpario exists to make internship information easier to understand.
-            </p>
-          </div>
+          <RevealGroup className="mb-8">
+            <Reveal>
+              <SectionLabel className="mb-3">OUR MISSION & VALUES</SectionLabel>
+            </Reveal>
+            <Reveal>
+              <h1 className="text-h1 uppercase tracking-tight text-foreground mb-4">
+                About Transpario
+              </h1>
+            </Reveal>
+            <Reveal>
+              <p className="text-body-lg text-foreground font-medium leading-relaxed max-w-3xl">
+                Transpario exists to make internship information easier to understand.
+              </p>
+            </Reveal>
+          </RevealGroup>
 
-          <div className="bg-surface border border-border p-6 sm:p-8 rounded-[var(--radius)] relative overflow-hidden mb-12">
-            <div className="absolute top-0 left-0 w-1 h-full bg-accent" />
-            <div className="space-y-4 text-body text-foreground-muted leading-relaxed">
-              <p>
-                Students should be able to understand what an internship opportunity involves before deciding whether to apply.
-              </p>
-              <p>
-                Transpario brings together structured information and student experiences to provide a clearer picture of internship programs.
-              </p>
-              <p>
-                We focus on details such as payment, certificates, stipends, selection processes, project work, mentorship, and student experiences.
-              </p>
+          <Reveal>
+            <div className="bg-white/[0.03] backdrop-blur-md border border-border p-6 sm:p-8 rounded-[var(--radius)] relative overflow-hidden mb-12 hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
+              <div className="absolute top-0 left-0 w-1 h-full bg-accent" />
+              <div className="space-y-4 text-body text-foreground-muted leading-relaxed">
+                <p>
+                  Students should be able to understand what an internship opportunity involves before deciding whether to apply.
+                </p>
+                <p>
+                  Transpario brings together structured information and student experiences to provide a clearer picture of internship programs.
+                </p>
+                <p>
+                  We focus on details such as payment, certificates, stipends, selection processes, project work, mentorship, and student experiences.
+                </p>
+              </div>
             </div>
-          </div>
+          </Reveal>
         </Container>
       </Section>
 
       {/* Subsection 1: We don't tell you what to choose */}
       <Section borderTop className="py-12 md:py-16">
         <Container className="max-w-4xl">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-7 space-y-4">
+          <RevealGroup className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <Reveal className="lg:col-span-7 space-y-4">
               <h2 className="text-h2 uppercase text-foreground font-heading tracking-tight">
                 We don&apos;t tell you what to choose.
               </h2>
@@ -64,10 +73,10 @@ export default function AboutPage() {
                   We help you understand the information available so you can make that decision yourself.
                 </p>
               </div>
-            </div>
+            </Reveal>
 
-            <div className="lg:col-span-5">
-              <Card className="p-6 bg-surface-hover/80 border-border relative">
+            <Reveal className="lg:col-span-5">
+              <Card className="p-6 bg-white/[0.03] backdrop-blur-md border-border relative hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
                 <Quote className="w-8 h-8 text-accent/40 mb-3" />
                 <blockquote className="text-body font-heading font-semibold text-foreground italic mb-4 leading-snug">
                   &ldquo;Transpario does not decide which internship is right for you.&rdquo;
@@ -76,28 +85,28 @@ export default function AboutPage() {
                   NEUTRAL TRANSPARENCY
                 </span>
               </Card>
-            </div>
-          </div>
+            </Reveal>
+          </RevealGroup>
         </Container>
       </Section>
 
       {/* Subsection 2: Information over assumptions */}
-      <Section borderTop className="py-12 md:py-16 bg-surface/50">
+      <Section borderTop className="py-12 md:py-16 bg-black/40 backdrop-blur-sm">
         <Container className="max-w-4xl">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-5 order-2 lg:order-1">
-              <Card className="p-6 bg-surface border-border">
+          <RevealGroup className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <Reveal className="lg:col-span-5 order-2 lg:order-1">
+              <Card className="p-6 bg-white/[0.03] backdrop-blur-md border-border hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
                 <Scale className="w-7 h-7 text-accent mb-3" />
                 <p className="text-sm font-heading font-semibold text-foreground mb-3 leading-snug">
                   &ldquo;When information is not available, we do not automatically assume that something does not exist.&rdquo;
                 </p>
-                <span className="text-[11px] font-mono uppercase tracking-wider font-bold text-foreground-muted bg-surface-hover px-2 py-1 rounded inline-block border border-border/50">
+                <span className="text-[11px] font-mono uppercase tracking-wider font-bold text-foreground-muted bg-white/[0.05] px-2 py-1 rounded inline-block border border-border/50">
                   CLEAR CLASSIFICATIONS
                 </span>
               </Card>
-            </div>
+            </Reveal>
 
-            <div className="lg:col-span-7 order-1 lg:order-2 space-y-4">
+            <Reveal className="lg:col-span-7 order-1 lg:order-2 space-y-4">
               <h2 className="text-h2 uppercase text-foreground font-heading tracking-tight">
                 Information over assumptions.
               </h2>
@@ -115,16 +124,16 @@ export default function AboutPage() {
                   Student experiences are identified as individual experiences rather than universal claims.
                 </p>
               </div>
-            </div>
-          </div>
+            </Reveal>
+          </RevealGroup>
         </Container>
       </Section>
 
       {/* Subsection 3: Reviewed information */}
       <Section borderTop className="py-12 md:py-16">
         <Container className="max-w-4xl">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-7 space-y-4">
+          <RevealGroup className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <Reveal className="lg:col-span-7 space-y-4">
               <h2 className="text-h2 uppercase text-foreground font-heading tracking-tight">
                 Reviewed information.
               </h2>
@@ -136,10 +145,10 @@ export default function AboutPage() {
                   Evidence may help the Transpario team understand and verify specific claims, but private or sensitive evidence is not publicly exposed by default.
                 </p>
               </div>
-            </div>
+            </Reveal>
 
-            <div className="lg:col-span-5">
-              <Card className="p-6 bg-surface-hover/80 border-border">
+            <Reveal className="lg:col-span-5">
+              <Card className="p-6 bg-white/[0.03] backdrop-blur-md border-border hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
                 <ShieldCheck className="w-7 h-7 text-positive mb-3" />
                 <p className="text-sm font-heading font-semibold text-foreground mb-3 leading-snug">
                   &ldquo;Private or sensitive evidence is not publicly exposed by default.&rdquo;
@@ -148,29 +157,37 @@ export default function AboutPage() {
                   VERIFICATION PROTOCOL
                 </span>
               </Card>
-            </div>
-          </div>
+            </Reveal>
+          </RevealGroup>
         </Container>
       </Section>
 
       {/* Footer Call to Action */}
-      <Section borderTop className="py-16 bg-surface">
+      <Section borderTop className="py-16 bg-black/40 backdrop-blur-sm">
         <Container className="max-w-4xl text-center">
-          <h2 className="text-h2 uppercase text-foreground mb-4">
-            READY TO EXPLORE OR SHARE?
-          </h2>
-          <p className="text-body-lg text-foreground-muted mb-8 max-w-xl mx-auto">
-            Browse verified internship data or help the community by sharing your own experience.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button href="/explore" variant="primary" className="w-full sm:w-auto">
-              EXPLORE INTERNSHIPS
-            </Button>
-            <Button href="/review" variant="secondary" className="w-full sm:w-auto flex items-center justify-center gap-2">
-              <span>REPORT AN INTERNSHIP</span>
-              <ArrowRight className="w-4 h-4" />
-            </Button>
-          </div>
+          <RevealGroup>
+            <Reveal>
+              <h2 className="text-h2 uppercase text-foreground mb-4">
+                READY TO EXPLORE OR SHARE?
+              </h2>
+            </Reveal>
+            <Reveal>
+              <p className="text-body-lg text-foreground-muted mb-8 max-w-xl mx-auto">
+                Browse verified internship data or help the community by sharing your own experience.
+              </p>
+            </Reveal>
+            <Reveal>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <Button href="/explore" variant="primary" className="w-full sm:w-auto">
+                  EXPLORE INTERNSHIPS
+                </Button>
+                <Button href="/review" variant="secondary" className="w-full sm:w-auto flex items-center justify-center gap-2">
+                  <span>REPORT AN INTERNSHIP</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </div>
+            </Reveal>
+          </RevealGroup>
         </Container>
       </Section>
     </div>

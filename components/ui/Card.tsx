@@ -6,10 +6,10 @@ interface CardProps {
   as?: React.ElementType;
 }
 
-export default function Card({ children, className = '', as: Component = 'div', ...props }: CardProps & React.HTMLAttributes<HTMLDivElement>) {
+export default function Card({ children, className = '', as: Component = 'div', ...props }: any) {
   return (
     <Component 
-      className={`bg-surface border border-border rounded-[var(--radius)] p-6 transition-colors duration-200 hover:border-border-strong ${className}`}
+      className={`bg-white/[0.03] backdrop-blur-md border border-border rounded-[var(--radius)] p-6 transition-colors duration-200 hover:border-border-strong ${className}`}
       {...props}
     >
       {children}

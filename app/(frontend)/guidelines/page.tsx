@@ -15,6 +15,7 @@ import {
   ClipboardCheck,
   AlertCircle
 } from 'lucide-react';
+import { Reveal, RevealGroup } from '@/components/Reveal';
 
 export const metadata: Metadata = {
   title: 'Transpario Guidelines — Editorial Principles',
@@ -108,70 +109,84 @@ export default function GuidelinesPage() {
       {/* Header */}
       <Section>
         <Container>
-          <div className="max-w-3xl mb-12 md:mb-16">
-            <SectionLabel className="mb-3">STANDARDS & TAXONOMY</SectionLabel>
-            <h1 className="text-h1 uppercase tracking-tight text-foreground mb-4">
-              Our Guidelines
-            </h1>
-            <p className="text-body-lg text-foreground-muted leading-relaxed font-normal">
-              Transpario is built around a simple principle: present useful information without unnecessary assumptions.
-            </p>
-          </div>
+          <RevealGroup className="max-w-3xl mb-12 md:mb-16">
+            <Reveal>
+              <SectionLabel className="mb-3">STANDARDS & TAXONOMY</SectionLabel>
+            </Reveal>
+            <Reveal>
+              <h1 className="text-h1 uppercase tracking-tight text-foreground mb-4">
+                Our Guidelines
+              </h1>
+            </Reveal>
+            <Reveal>
+              <p className="text-body-lg text-foreground-muted leading-relaxed font-normal">
+                Transpario is built around a simple principle: present useful information without unnecessary assumptions.
+              </p>
+            </Reveal>
+          </RevealGroup>
 
           {/* Guidelines 01 - 07 2-Column Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+          <RevealGroup className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
             {GUIDELINES.map((g) => {
               const Icon = g.Icon;
               return (
-                <Card key={g.num} className="p-6 sm:p-7 border-border hover:border-accent/60 transition-all duration-200 flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-xs font-mono font-bold uppercase tracking-wider text-accent bg-accent/10 px-2 py-0.5 rounded">
-                        {g.num}
-                      </span>
-                      <div className="w-9 h-9 rounded-full bg-surface-hover border border-border flex items-center justify-center text-accent">
-                        <Icon className="w-4 h-4" />
+                <Reveal key={g.num}>
+                  <Card className="p-6 sm:p-7 bg-white/[0.03] backdrop-blur-md border-border hover:border-accent/60 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg flex flex-col justify-between h-full">
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-xs font-mono font-bold uppercase tracking-wider text-accent bg-accent/10 px-2 py-0.5 rounded">
+                          {g.num}
+                        </span>
+                        <div className="w-9 h-9 rounded-full bg-white/[0.05] border border-border flex items-center justify-center text-accent">
+                          <Icon className="w-4 h-4" />
+                        </div>
                       </div>
+                      <h2 className="text-h3 uppercase text-foreground font-heading mb-2">
+                        {g.title}
+                      </h2>
+                      <p className="text-body text-foreground-muted leading-relaxed">
+                        {g.desc}
+                      </p>
                     </div>
-                    <h2 className="text-h3 uppercase text-foreground font-heading mb-2">
-                      {g.title}
-                    </h2>
-                    <p className="text-body text-foreground-muted leading-relaxed">
-                      {g.desc}
-                    </p>
-                  </div>
-                </Card>
+                  </Card>
+                </Reveal>
               );
             })}
-          </div>
+          </RevealGroup>
         </Container>
       </Section>
 
       {/* Classification Glossary */}
-      <Section borderTop className="py-12 md:py-16 bg-surface/40">
+      <Section borderTop className="py-12 md:py-16 bg-black/40 backdrop-blur-sm">
         <Container>
           <div className="max-w-4xl">
-            <div className="mb-10">
-              <SectionLabel className="mb-2">TERMINOLOGY GLOSSARY</SectionLabel>
-              <h2 className="text-h1 uppercase tracking-tight text-foreground">
-                What do our classifications mean?
-              </h2>
-            </div>
+            <RevealGroup className="mb-10">
+              <Reveal>
+                <SectionLabel className="mb-2">TERMINOLOGY GLOSSARY</SectionLabel>
+              </Reveal>
+              <Reveal>
+                <h2 className="text-h1 uppercase tracking-tight text-foreground">
+                  What do our classifications mean?
+                </h2>
+              </Reveal>
+            </RevealGroup>
 
-            <div className="space-y-4">
+            <RevealGroup className="space-y-4">
               {GLOSSARY.map((item) => (
-                <Card key={item.title} className="p-5 sm:p-6 bg-surface border-border flex flex-col sm:flex-row sm:items-start gap-4">
-                  <div className="shrink-0 pt-0.5">
-                    <Tag color={item.color} className="text-xs px-3 py-1 font-bold">
-                      {item.title.toUpperCase()}
-                    </Tag>
-                  </div>
-                  <p className="text-body text-foreground-muted leading-relaxed">
-                    {item.desc}
-                  </p>
-                </Card>
+                <Reveal key={item.title}>
+                  <Card className="p-5 sm:p-6 bg-white/[0.03] backdrop-blur-md border-border flex flex-col sm:flex-row sm:items-start gap-4 hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
+                    <div className="shrink-0 pt-0.5">
+                      <Tag color={item.color} className="text-xs px-3 py-1 font-bold">
+                        {item.title.toUpperCase()}
+                      </Tag>
+                    </div>
+                    <p className="text-body text-foreground-muted leading-relaxed">
+                      {item.desc}
+                    </p>
+                  </Card>
+                </Reveal>
               ))}
-            </div>
+            </RevealGroup>
           </div>
         </Container>
       </Section>
@@ -179,36 +194,38 @@ export default function GuidelinesPage() {
       {/* Not Disclosed Does Not Mean No Highlighted Callout Box */}
       <Section borderTop className="py-12 md:py-20">
         <Container className="max-w-4xl">
-          <Card className="p-8 sm:p-10 bg-surface/90 border-accent/40 shadow-xl relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-2 h-full bg-accent" />
-            
-            <div className="flex items-center gap-3 mb-4">
-              <AlertCircle className="w-6 h-6 text-accent shrink-0" />
-              <h2 className="text-h2 uppercase tracking-tight text-foreground font-heading">
-                Not disclosed does not mean no.
-              </h2>
-            </div>
+          <Reveal>
+            <Card className="p-8 sm:p-10 bg-white/[0.05] backdrop-blur-md border-accent/40 shadow-xl relative overflow-hidden hover:-translate-y-1 transition-all duration-300">
+              <div className="absolute top-0 left-0 w-2 h-full bg-accent" />
+              
+              <div className="flex items-center gap-3 mb-4">
+                <AlertCircle className="w-6 h-6 text-accent shrink-0" />
+                <h2 className="text-h2 uppercase tracking-tight text-foreground font-heading">
+                  Not disclosed does not mean no.
+                </h2>
+              </div>
 
-            <p className="text-body-lg text-foreground-muted mb-4 leading-relaxed">
-              When Transpario does not have enough reliable information about a feature, we use &quot;Not Disclosed&quot; rather than assuming that the feature does not exist.
-            </p>
+              <p className="text-body-lg text-foreground-muted mb-4 leading-relaxed">
+                When Transpario does not have enough reliable information about a feature, we use &quot;Not Disclosed&quot; rather than assuming that the feature does not exist.
+              </p>
 
-            <p className="text-body text-foreground font-semibold mb-4">
-              This applies especially to:
-            </p>
+              <p className="text-body text-foreground font-semibold mb-4">
+                This applies especially to:
+              </p>
 
-            <div className="flex flex-wrap gap-2.5">
-              {NOT_DISCLOSED_ITEMS.map((item) => (
-                <span 
-                  key={item}
-                  className="px-3.5 py-1.5 rounded-[var(--radius)] bg-surface-hover border border-border text-sm font-heading font-semibold text-foreground uppercase tracking-wider inline-flex items-center gap-1.5"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-                  {item}
-                </span>
-              ))}
-            </div>
-          </Card>
+              <div className="flex flex-wrap gap-2.5">
+                {NOT_DISCLOSED_ITEMS.map((item) => (
+                  <span 
+                    key={item}
+                    className="px-3.5 py-1.5 rounded-[var(--radius)] bg-white/[0.05] border border-border text-sm font-heading font-semibold text-foreground uppercase tracking-wider inline-flex items-center gap-1.5"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </Card>
+          </Reveal>
         </Container>
       </Section>
     </div>
