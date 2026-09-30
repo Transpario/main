@@ -17,7 +17,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Transpario — Know Before You Apply',
+  title: 'Transpario - Know Before You Apply',
   description: "A neutral internship transparency platform helping students understand what they're choosing.",
 };
 

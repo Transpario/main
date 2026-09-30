@@ -18,14 +18,14 @@ import {
 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'How Transpario Works — Transparency Pipeline',
+  title: 'How Transpario Works - Transparency Pipeline',
   description: 'Learn how Transpario collects, reviews, classifies, and publishes internship information.',
 };
 
 const STEPS = [
   {
     number: '01',
-    title: '01 — STUDENTS SHARE',
+    title: '01 - STUDENTS SHARE',
     shortTitle: 'Student Share',
     desc: 'Students submit their internship experiences through the Transpario review form.',
     Icon: FileText,
@@ -33,7 +33,7 @@ const STEPS = [
   },
   {
     number: '02',
-    title: '02 — WE REVIEW',
+    title: '02 - WE REVIEW',
     shortTitle: 'Team Review',
     desc: 'The Transpario team reviews submissions for clarity, relevance, consistency, and supporting information where available.',
     Icon: ClipboardCheck,
@@ -41,7 +41,7 @@ const STEPS = [
   },
   {
     number: '03',
-    title: '03 — WE CLASSIFY',
+    title: '03 - WE CLASSIFY',
     shortTitle: 'Classification',
     desc: 'Relevant information is organized into categories such as payment, certificate, stipend, selection, work, and mentorship.',
     Icon: Layers,
@@ -49,7 +49,7 @@ const STEPS = [
   },
   {
     number: '04',
-    title: '04 — WE APPROVE',
+    title: '04 - WE APPROVE',
     shortTitle: 'Approval',
     desc: 'Information is reviewed internally and approved before being published to the public registry.',
     Icon: ShieldCheck,
@@ -57,7 +57,7 @@ const STEPS = [
   },
   {
     number: '05',
-    title: '05 — YOU EXPLORE',
+    title: '05 - YOU EXPLORE',
     shortTitle: 'Public Explore',
     desc: 'Students can search the registry, understand available information, read student experiences, and make their own decisions.',
     Icon: Compass,

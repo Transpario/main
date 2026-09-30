@@ -9,7 +9,7 @@ import { Quote, Scale, ShieldCheck, ArrowRight } from 'lucide-react';
 import { Reveal, RevealGroup } from '@/components/Reveal';
 
 export const metadata: Metadata = {
-  title: 'About Transpario — Mission & Principles',
+  title: 'About Transpario - Mission & Principles',
   description: 'Learn about Transpario, an internship transparency platform designed to help students make informed decisions.',
 };
 

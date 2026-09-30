@@ -11,7 +11,7 @@ import { Metadata } from 'next';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'Student Experiences — Transpario',
+  title: 'Student Experiences - Transpario',
   description: 'What happened during the internship, from the people who were there.',
 };
 

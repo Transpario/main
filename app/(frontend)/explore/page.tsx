@@ -11,7 +11,7 @@ import { ArrowRight } from 'lucide-react';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'The Index — Transpario',
+  title: 'The Index - Transpario',
   description: 'Internship opportunities, organized by the information students usually want to know.',
 };
 

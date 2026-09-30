@@ -18,7 +18,7 @@ import {
 import { Reveal, RevealGroup } from '@/components/Reveal';
 
 export const metadata: Metadata = {
-  title: 'Transpario Guidelines — Editorial Principles',
+  title: 'Transpario Guidelines - Editorial Principles',
   description: 'Learn how Transpario handles internship information, student experiences, classifications, evidence, and privacy.',
 };
 

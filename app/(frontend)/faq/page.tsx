@@ -8,7 +8,7 @@ import { getPublishedFAQs } from '@/lib/sanity/queries';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Frequently Asked Questions — Transpario',
+  title: 'Frequently Asked Questions - Transpario',
   description: 'Common questions and answers about Transpario and how it works.',
 };
 

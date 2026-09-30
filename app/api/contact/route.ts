@@ -21,7 +21,7 @@ export async function POST(request: Request) {
         avatar_url: 'https://transpario.page/favicon.ico',
         embeds: [
           {
-            title: '📩 New Contact Inquiry — Transpario',
+            title: '📩 New Contact Inquiry - Transpario',
             color: 0x2563eb, // Accent blue
             fields: [
               { name: 'Name', value: String(name), inline: true },

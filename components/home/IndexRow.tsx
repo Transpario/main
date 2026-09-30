@@ -81,7 +81,7 @@ export default function IndexRow({ data, index }: IndexRowProps) {
             {platform?.name || 'Unknown Platform'}
           </span>
 
-          {/* Program name — the dominant text */}
+          {/* Program name - the dominant text */}
           <h3 className="text-[20px] md:text-[24px] font-heading font-bold text-foreground leading-tight mb-1 group-hover:text-white transition-colors duration-200">
             {name}
           </h3>

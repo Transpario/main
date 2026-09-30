@@ -10,7 +10,7 @@ import { Metadata } from 'next';
 import { Mail, Clock, ExternalLink } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Contact Transpario — Support & Inquiries',
+  title: 'Contact Transpario - Support & Inquiries',
   description: 'Get in touch with the Transpario team for questions, corrections, partnerships, or contributor inquiries.',
 };
 

@@ -30,12 +30,12 @@ const QUESTIONS = [
   },
   {
     question: 'How do they select?',
-    description: 'Direct enrollment, applications, tests, interviews — or they don\'t say.',
+    description: 'Direct enrollment, applications, tests, interviews - or they don\'t say.',
     href: '/explore',
   },
   {
     question: 'What will you actually do?',
-    description: 'Real projects, training modules, assignments — the listing rarely says.',
+    description: 'Real projects, training modules, assignments - the listing rarely says.',
     href: '/explore',
   },
   {
@@ -51,7 +51,7 @@ export default async function Home() {
   return (
     <>
       {/* ═══════════════════════════════════════════════
-          SECTION 1 — HERO
+          SECTION 1 - HERO
       ═══════════════════════════════════════════════ */}
       <section className="min-h-[85vh] md:min-h-[90vh] flex flex-col justify-center relative">
         <Container wide>
@@ -95,7 +95,7 @@ export default async function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════
-          SECTION 2 — BEFORE YOU APPLY
+          SECTION 2 - BEFORE YOU APPLY
       ═══════════════════════════════════════════════ */}
       <section className="border-t border-white/[0.06]">
         <Container wide>
@@ -126,7 +126,7 @@ export default async function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════
-          SECTION 3 — FROM THE INDEX
+          SECTION 3 - FROM THE INDEX
       ═══════════════════════════════════════════════ */}
       <section className="border-t border-white/[0.06] bg-black/40 backdrop-blur-sm">
         <Container wide>
@@ -183,7 +183,7 @@ export default async function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════
-          SECTION 4 — STUDENT EXPERIENCES
+          SECTION 4 - STUDENT EXPERIENCES
       ═══════════════════════════════════════════════ */}
       <section className="border-t border-white/[0.06]">
         <Container wide>
@@ -200,7 +200,7 @@ export default async function Home() {
                     The listing told you one thing. What actually happened?
                   </p>
                   <p>
-                    If you&apos;ve completed an internship listed here — or one that isn&apos;t listed yet — you can share what you experienced.
+                    If you&apos;ve completed an internship listed here - or one that isn&apos;t listed yet - you can share what you experienced.
                   </p>
                 </div>
               </Reveal>
@@ -219,7 +219,7 @@ export default async function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════
-          SECTION 5 — INFORMATION PHILOSOPHY
+          SECTION 5 - INFORMATION PHILOSOPHY
       ═══════════════════════════════════════════════ */}
       <section className="border-t border-white/[0.06] bg-black/40 backdrop-blur-sm">
         <Container wide>
@@ -240,7 +240,7 @@ export default async function Home() {
                 </Reveal>
                 <Reveal>
                   <p>
-                    &ldquo;Not Disclosed&rdquo; means we haven&apos;t confirmed it — not that it doesn&apos;t exist.
+                    &ldquo;Not Disclosed&rdquo; means we haven&apos;t confirmed it - not that it doesn&apos;t exist.
                   </p>
                 </Reveal>
                 <Reveal>
@@ -266,7 +266,7 @@ export default async function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════
-          SECTION 6 — FINAL CTA
+          SECTION 6 - FINAL CTA
       ═══════════════════════════════════════════════ */}
       <section className="border-t border-white/[0.06]">
         <Container wide>

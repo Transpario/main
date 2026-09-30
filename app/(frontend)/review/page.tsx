@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 import { ExperienceForm } from '@/components/experience/ExperienceForm';
 
 export const metadata: Metadata = {
-  title: 'Report an Internship — Transpario',
+  title: 'Report an Internship - Transpario',
   description: 'Tell us what happened. Submit your field notes to help another student make an informed decision.',
 };
 
