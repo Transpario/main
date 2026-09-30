@@ -27,5 +27,6 @@ export async function sanityFetch<QueryResponse>({
       revalidate: process.env.NODE_ENV === 'development' ? 30 : 3600,
       tags,
     },
-  });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } as any);
 }

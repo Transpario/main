@@ -1,10 +1,6 @@
 import React from 'react';
 import Container from '@/components/layout/Container';
-import Section from '@/components/layout/Section';
 import QuestionRow from '@/components/home/QuestionRow';
-import IndexRow from '@/components/home/IndexRow';
-import { client } from '@/lib/sanity/client';
-import { getRecentlyReviewed } from '@/lib/sanity/queries';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { Reveal, RevealGroup } from '@/components/Reveal';
@@ -46,7 +42,6 @@ const QUESTIONS = [
 ];
 
 export default async function Home() {
-  const recentlyReviewed = await client.fetch(getRecentlyReviewed);
 
   return (
     <>
@@ -125,62 +120,6 @@ export default async function Home() {
         </Container>
       </section>
 
-      {/* ═══════════════════════════════════════════════
-          SECTION 3 - FROM THE INDEX
-      ═══════════════════════════════════════════════ */}
-      <section className="border-t border-white/[0.06] bg-black/40 backdrop-blur-sm">
-        <Container wide>
-          <div className="py-20 md:py-32">
-            <Reveal>
-              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12 md:mb-16">
-                <div>
-                  <span className="text-[11px] font-heading font-bold uppercase tracking-[0.14em] text-foreground-subtle block mb-3">
-                    Recently Reviewed
-                  </span>
-                  <h2 className="text-section-heading text-foreground">
-                    From the Index
-                  </h2>
-                </div>
-                <Link
-                  href="/explore"
-                  className="inline-flex items-center gap-2 text-[12px] font-heading font-bold uppercase tracking-[0.12em] text-foreground-subtle hover:text-foreground transition-colors group shrink-0"
-                >
-                  <span>View All</span>
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-200" />
-                </Link>
-              </div>
-            </Reveal>
-
-            {recentlyReviewed && recentlyReviewed.length > 0 ? (
-              <RevealGroup className="border-t border-white/[0.06]">
-                {recentlyReviewed.slice(0, 5).map((program: { _id: string, [key: string]: unknown }, i: number) => (
-                  <Reveal key={program._id}>
-                    <IndexRow data={program} index={i} />
-                  </Reveal>
-                ))}
-              </RevealGroup>
-            ) : (
-              <Reveal>
-                <div className="border-t border-white/[0.06] py-16 md:py-24">
-                  <h3 className="text-[28px] md:text-[36px] font-heading font-bold uppercase text-foreground tracking-tight mb-6">
-                    No internships listed yet.
-                  </h3>
-                  <p className="text-[15px] text-foreground-muted max-w-md mb-8">
-                    We&apos;re building this index with the student community. Know of an internship? Report it and help the next student.
-                  </p>
-                  <Link
-                    href="/review"
-                    className="inline-flex items-center gap-3 h-[44px] px-6 bg-white !text-black font-heading font-bold text-[13px] uppercase tracking-[0.1em] rounded-[var(--radius)] hover:bg-white/90 hover:!text-black hover:-translate-y-[1px] hover:shadow-[0_4px_14px_rgba(0,0,0,0.18)] active:translate-y-0 transition-all duration-200 ease-out select-none"
-                  >
-                    <span>Report an Internship</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              </Reveal>
-            )}
-          </div>
-        </Container>
-      </section>
 
       {/* ═══════════════════════════════════════════════
           SECTION 4 - STUDENT EXPERIENCES
