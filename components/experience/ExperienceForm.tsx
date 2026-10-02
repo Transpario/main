@@ -303,7 +303,7 @@ export function ExperienceForm() {
                     { value: 'linkedin', label: 'LinkedIn' },
                     { value: 'internshala', label: 'Internshala' },
                     { value: 'company_website', label: 'Company Website' },
-                    { value: 'social', label: 'Instagram / WhatsApp / Telegram' },
+                    { value: 'social', label: 'Instagram / Telegram' },
                     { value: 'other', label: 'Other' },
                   ]} />
                   <InputField label="Link to the listing (Optional)" name="listingUrl" value={data.listingUrl} onChange={handleChange} error={errors.listingUrl} placeholder="https://..." />
